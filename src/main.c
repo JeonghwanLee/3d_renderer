@@ -154,11 +154,20 @@ void render_color_buffer(void)
 
 void draw_grid(void)
 {
-	for (size_t row = 0; row < WINDOW_HEIGHT; row++) {
-		for (size_t col = 0; col < WINDOW_WIDTH; col++) {
-			if (row % 10 == 0 || col % 10 == 0) {
-				pa_color_buffer[row * WINDOW_WIDTH + col] = 0xFF000000;
-			}
+	for (int y = 0; y < WINDOW_HEIGHT; y += 10) {
+		for (int x = 0; x < WINDOW_WIDTH; x += 10) {
+			pa_color_buffer[y * WINDOW_WIDTH + x] = 0xFF000000;
+		}
+	}
+}
+
+void draw_rect(int x, int y, int width, int height, uint32_t color)
+{
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			int cur_y = i + y;
+			int cur_x = j + x;
+			pa_color_buffer[cur_y * WINDOW_WIDTH + cur_x] = color;
 		}
 	}
 }
@@ -170,6 +179,7 @@ void render(void)
 	SDL_RenderClear(g_sdl_renderer);
 
 	draw_grid();
+	draw_rect(300, 200, 300, 150, 0xFF00FF00);
 
 	render_color_buffer();
 	clear_color_buffer();
